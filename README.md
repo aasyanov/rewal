@@ -288,7 +288,7 @@ CRC-32C uses SSE4.2 (x86_64) or ARM CRC (aarch64) intrinsics with runtime detect
 
 ## Benchmark Results
 
-Measured on Intel Core i7-10510U @ 1.80GHz, Windows 10, Rust 1.70+ (stable), NVMe SSD.
+Measured on Intel Core i7-10510U @ 1.80GHz, Windows 10, Rust 1.81+ (stable), NVMe SSD.
 Cold-boot run in a bare terminal (no IDE overhead). Criterion with 100 samples per benchmark.
 
 ### Write Path

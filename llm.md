@@ -1,6 +1,6 @@
 # REWAL — LLM Reference
 
-> Crate: `rewal` | Rust 1.70+ | Zero dependencies | Wire-compatible with UEWAL (Go)
+> Crate: `rewal` | Rust 1.81+ | Zero dependencies | Wire-compatible with UEWAL (Go)
 
 ## CRITICAL RULES
 

@@ -2,7 +2,7 @@
 name = "rewal"
 version = "0.1.0"
 edition = "2021"
-rust-version = "1.70"
+rust-version = "1.81"
 description = "Ultra-fast embedded Write-Ahead Log. Zero dependencies."
 license = "MIT"
 repository = "https://github.com/aasyanov/rewal"
