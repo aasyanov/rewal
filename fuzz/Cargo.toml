@@ -1,0 +1,33 @@
+[package]
+name = "rewal-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+arbitrary = { version = "1", features = ["derive"] }
+tempfile = "3"
+
+[dependencies.rewal]
+path = ".."
+
+[[bin]]
+name = "fuzz_decode_batch"
+path = "fuzz_targets/fuzz_decode_batch.rs"
+doc = false
+
+[[bin]]
+name = "fuzz_append_replay"
+path = "fuzz_targets/fuzz_append_replay.rs"
+doc = false
+
+[[bin]]
+name = "fuzz_recovery_after_corruption"
+path = "fuzz_targets/fuzz_recovery_after_corruption.rs"
+doc = false
+
+[workspace]

@@ -1,0 +1,20 @@
+[package]
+name = "rewal"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+description = "Ultra-fast embedded Write-Ahead Log. Zero dependencies."
+license = "MIT"
+repository = "https://github.com/aasyanov/rewal"
+categories = ["database", "data-structures", "filesystem"]
+keywords = ["wal", "write-ahead-log", "event-sourcing", "embedded", "high-performance"]
+
+[dependencies]
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+tempfile = "3"
+
+[[bench]]
+name = "wal"
+harness = false

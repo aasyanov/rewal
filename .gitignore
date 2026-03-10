@@ -1,0 +1,27 @@
+# Build artifacts
+/target/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.tst
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Benchmark reports
+criterion/
+
+# Fuzz artifacts
+fuzz/target/
+fuzz/corpus/
+fuzz/artifacts/
+
+# Coverage
+*.profraw
+lcov.info
+tarpaulin-report.html

@@ -1,0 +1,116 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -Dwarnings
+
+jobs:
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - run: cargo fmt --check
+
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo clippy --all-targets
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        rust: [stable, "1.70"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.rust }}
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo test --all-targets
+
+      - name: Check coverage threshold
+        if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
+        run: |
+          cargo install cargo-tarpaulin --locked || true
+          RESULT=$(cargo tarpaulin --skip-clean --out json 2>/dev/null | tail -1)
+          COVERAGE=$(echo "$RESULT" | python3 -c "import sys,json; print(f'{json.load(sys.stdin)[\"coverage\"]:0.1f}')")
+          echo "Coverage: ${COVERAGE}%"
+          echo "### Coverage: ${COVERAGE}%" >> "$GITHUB_STEP_SUMMARY"
+          THRESHOLD=80
+          if [ "$(echo "$COVERAGE < $THRESHOLD" | bc -l)" -eq 1 ]; then
+            echo "::error::Coverage ${COVERAGE}% is below threshold ${THRESHOLD}%"
+            exit 1
+          fi
+
+  miri:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: miri
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo miri test --lib
+        env:
+          MIRIFLAGS: -Zmiri-disable-isolation
+
+  fuzz:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo install cargo-fuzz --locked || true
+
+      - name: Fuzz DecodeBatch
+        run: cargo +nightly fuzz run fuzz_decode_batch -- -max_total_time=30
+        env:
+          RUSTFLAGS: ""
+
+      - name: Fuzz AppendReplay
+        run: cargo +nightly fuzz run fuzz_append_replay -- -max_total_time=30
+        env:
+          RUSTFLAGS: ""
+
+      - name: Fuzz RecoveryAfterCorruption
+        run: cargo +nightly fuzz run fuzz_recovery_after_corruption -- -max_total_time=30
+        env:
+          RUSTFLAGS: ""
+
+  benchmark:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo bench --bench wal -- --output-format bencher | tee benchmark.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: benchmark.txt
+          retention-days: 90
