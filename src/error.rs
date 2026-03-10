@@ -131,8 +131,8 @@ mod tests {
     fn equality_by_variant() {
         assert_eq!(Error::Closed, Error::Closed);
         assert_ne!(Error::Closed, Error::Draining);
-        let a = Error::Io(io::Error::new(io::ErrorKind::Other, "a"));
-        let b = Error::Io(io::Error::new(io::ErrorKind::Other, "b"));
+        let a = Error::Io(io::Error::other("a"));
+        let b = Error::Io(io::Error::other("b"));
         assert_eq!(a, b);
     }
 
@@ -144,7 +144,7 @@ mod tests {
 
     #[test]
     fn error_trait_source() {
-        let io_err = Error::Io(io::Error::new(io::ErrorKind::Other, "x"));
+        let io_err = Error::Io(io::Error::other("x"));
         assert!(StdError::source(&io_err).is_some());
         assert!(StdError::source(&Error::Closed).is_none());
     }
