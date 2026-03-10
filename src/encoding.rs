@@ -351,10 +351,15 @@ pub fn decode_batch_frame_borrowed<'a>(
         records_data
     };
 
+    let rlen = records.len();
+    let max_records = rlen / 6;
+    if count > max_records {
+        return Err(Error::InvalidRecord);
+    }
+
     let mut events = Vec::with_capacity(count);
     let mut r_off = 0usize;
     let mut lsn = first_lsn;
-    let rlen = records.len();
 
     for _ in 0..count {
         if r_off + 6 > rlen {
