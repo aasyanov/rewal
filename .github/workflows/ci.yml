@@ -56,8 +56,8 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
         run: |
           cargo install cargo-tarpaulin --locked || true
-          RESULT=$(cargo tarpaulin --skip-clean --out json 2>/dev/null | tail -1)
-          COVERAGE=$(echo "$RESULT" | python3 -c "import sys,json; print(f'{json.load(sys.stdin)[\"coverage\"]:0.1f}')")
+          cargo tarpaulin --skip-clean --out json --output-dir target/tarpaulin
+          COVERAGE=$(python3 -c "import json; d=json.load(open('target/tarpaulin/tarpaulin-report.json')); print(f'{d[\"coverage\"]:0.1f}')")
           echo "Coverage: ${COVERAGE}%"
           echo "### Coverage: ${COVERAGE}%" >> "$GITHUB_STEP_SUMMARY"
           THRESHOLD=80
