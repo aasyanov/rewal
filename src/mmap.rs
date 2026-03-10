@@ -73,6 +73,7 @@ mod tests {
     use std::io::Write;
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn mmap_reader_file() {
         let dir = std::env::temp_dir().join("rewal_test_mmap");
         let _ = std::fs::remove_file(&dir);
@@ -96,6 +97,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn mmap_reader_empty() {
         let dir = std::env::temp_dir().join("rewal_test_mmap_empty");
         let _ = std::fs::remove_file(&dir);

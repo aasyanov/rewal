@@ -317,6 +317,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn iterator_all_events() {
         let (fs, total) = setup_file(&[3, 5, 2]);
         let mut it = new_iterator(&fs, 0, None).unwrap();
@@ -329,6 +330,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn iterator_from_lsn() {
         let (fs, _) = setup_file(&[5, 5]);
         let mut it = new_iterator(&fs, 7, None).unwrap();
@@ -340,6 +342,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn iterator_empty_file() {
         let path = std::env::temp_dir().join("rewal_replay_empty");
         let _ = std::fs::remove_file(&path);

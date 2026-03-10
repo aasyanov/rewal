@@ -13,7 +13,7 @@ keywords = ["wal", "write-ahead-log", "event-sourcing", "embedded", "high-perfor
 
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }
-tempfile = "3"
+tempfile = { version = "3", default-features = false }
 
 [[bench]]
 name = "wal"

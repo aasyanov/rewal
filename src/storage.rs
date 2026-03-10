@@ -147,6 +147,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn file_storage_lifecycle() {
         let dir = std::env::temp_dir().join("rewal_test_storage");
         let _ = std::fs::remove_file(&dir);
@@ -175,6 +176,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn file_locking() {
         let dir = std::env::temp_dir().join("rewal_test_flock");
         let _ = std::fs::remove_file(&dir);

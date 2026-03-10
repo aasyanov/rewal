@@ -537,6 +537,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn open_append_replay() {
         let path = temp_path("open_append_replay");
         let _ = std::fs::remove_file(&path);
@@ -566,6 +567,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn batch_append() {
         let path = temp_path("batch_append");
         let _ = std::fs::remove_file(&path);
@@ -593,6 +595,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn iterator_read() {
         let path = temp_path("iterator");
         let _ = std::fs::remove_file(&path);
@@ -615,6 +618,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn stats_tracking() {
         let path = temp_path("stats");
         let _ = std::fs::remove_file(&path);
@@ -633,6 +637,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn shutdown_idempotent() {
         let path = temp_path("shutdown_idempotent");
         let _ = std::fs::remove_file(&path);
@@ -645,6 +650,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn close_immediate() {
         let path = temp_path("close_immediate");
         let _ = std::fs::remove_file(&path);
@@ -660,6 +666,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn recovery_after_reopen() {
         let path = temp_path("recovery");
         let _ = std::fs::remove_file(&path);
@@ -697,6 +704,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn empty_batch_rejected() {
         let path = temp_path("empty_batch");
         let _ = std::fs::remove_file(&path);
@@ -710,6 +718,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn concurrent_appends() {
         let path = temp_path("concurrent");
         let _ = std::fs::remove_file(&path);
