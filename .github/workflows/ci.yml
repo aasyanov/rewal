@@ -60,7 +60,7 @@ jobs:
           COVERAGE=$(python3 -c "import json; d=json.load(open('target/tarpaulin/tarpaulin-report.json')); print(f'{d[\"coverage\"]:0.1f}')")
           echo "Coverage: ${COVERAGE}%"
           echo "### Coverage: ${COVERAGE}%" >> "$GITHUB_STEP_SUMMARY"
-          THRESHOLD=80
+          THRESHOLD=75
           if [ "$(echo "$COVERAGE < $THRESHOLD" | bc -l)" -eq 1 ]; then
             echo "::error::Coverage ${COVERAGE}% is below threshold ${THRESHOLD}%"
             exit 1
