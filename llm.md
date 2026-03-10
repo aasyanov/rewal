@@ -43,7 +43,7 @@ let s = wal.stats();                     // lock-free atomic snapshot
 
 ```rust
 Wal::open(path)
-    .sync_mode(SyncMode::Never | Batch | Interval(Duration))  // default: Never
+    .sync_mode(SyncMode::Never | SyncMode::Batch | SyncMode::Interval(Duration))  // default: Never
     .backpressure(Backpressure::Block | Drop | Error)          // default: Block
     .queue_capacity(4096)         // default: 4096
     .buffer_capacity(65536)       // default: 64KiB
@@ -81,7 +81,7 @@ enum State { Init, Running, Draining, Closed }
 ```
 append → AtomicU64 LSN → WriteQueue → writer thread → Storage
                             ▲                │
-                       FlushBarrier     encode → compress → write_all → maybe_sync → indexer
+                       FlushBarrier     encode → compress → write_all → indexer → maybe_sync
 ```
 
 ### Writer loop

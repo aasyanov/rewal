@@ -5,9 +5,9 @@ pub type Lsn = u64;
 /// A single entry in the write-ahead log.
 ///
 /// When submitting via [`Wal::append`] or [`Wal::append_batch`], leave `lsn`
-/// as zero — it is assigned automatically. During replay, `payload` and `meta`
-/// may reference memory-mapped storage (zero-copy); copy them if the data must
-/// outlive the callback or iterator.
+/// as zero — it is assigned automatically. `Event` always owns its data.
+/// For zero-copy access during reads, see [`BorrowedEvent`](crate::BorrowedEvent)
+/// returned by [`WalIterator::next_borrowed`](crate::WalIterator::next_borrowed).
 #[derive(Debug, Clone)]
 pub struct Event {
     /// Assigned by the WAL upon write. Zero on input.

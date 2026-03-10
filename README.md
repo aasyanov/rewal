@@ -391,7 +391,7 @@ cargo clippy: 0 warnings
 |---|---|---|
 | Unit tests | 60 | CRC, encoding, error, event, hooks, queue, state, stats, storage, mmap, replay, WAL lifecycle |
 | Doc-tests | 2 | Quick start examples in lib.rs and wal.rs |
-| Benchmarks | 18 | Write path, read path, encoding, flush, recovery, CRC, scan header |
+| Benchmarks | 19 | Write path, read path, encoding, flush, recovery, CRC, scan header |
 
 Tests cover: round-trip encode/decode, CRC validation, corruption detection, file locking, concurrent appends (4 threads), recovery after reopen, lifecycle transitions, iterator seek, empty/edge cases.
 

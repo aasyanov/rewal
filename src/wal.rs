@@ -45,8 +45,11 @@ impl Wal {
     /// Call [`build()`](WalBuilder::build) to finalize.
     ///
     /// ```no_run
-    /// # use rewal::Wal;
-    /// let wal = Wal::open("/tmp/my.wal").build().unwrap();
+    /// # use rewal::{Wal, Result};
+    /// # fn main() -> Result<()> {
+    /// let wal = Wal::open("/tmp/my.wal").build()?;
+    /// # Ok(())
+    /// # }
     /// ```
     pub fn open(path: impl AsRef<Path>) -> WalBuilder {
         WalBuilder::new(path)

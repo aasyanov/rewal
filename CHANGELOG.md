@@ -15,7 +15,7 @@ Initial public release.
 
 - Core WAL engine with single writer thread and lock-free LSN assignment (`AtomicU64`).
 - `Wal::open` builder API with `build()` for configuration and construction.
-- `append`, `append_with_meta`, `append_batch`, `append_zero_copy` write methods.
+- `append`, `append_with_meta`, `append_batch` write methods (move semantics enable zero-copy append).
 - `flush`, `sync`, `shutdown`, `close` lifecycle methods.
 - `replay(from_lsn, fn)` streaming replay with mmap zero-copy reads.
 - `iterator(from_lsn)` pull-based read interface with `next()` (owned) and `next_borrowed()` (zero-copy).
@@ -23,14 +23,14 @@ Initial public release.
 - Batch-framed wire format (EWAL v2) with single CRC-32C per batch for true batch atomicity.
 - Wire-compatible with [UEWAL](https://github.com/aasyanov/uewal) (Go) — files are interchangeable.
 - `Event.meta` field for opaque per-event metadata.
-- `Batch` type with `add`, `add_with_meta`, `reset` for reusable batch construction.
+- `Batch` type with `add`, `add_with_meta`, `clear` for reusable batch construction.
 - Pluggable `Compressor` trait (`compress`/`decompress`) via builder.
 - Pluggable `Indexer` trait (`on_append`) via builder.
 - Exported `Storage` trait with `FileStorage` implementation.
 - File locking via flock (Unix) / `LockFileEx` (Windows).
 - Platform-specific mmap: `mmap(2)` on Unix, `CreateFileMapping`/`MapViewOfFile` on Windows.
 - `compile_error!` for unsupported targets (neither unix nor windows).
-- Three durability modes: `SyncNever`, `SyncBatch`, `SyncInterval`.
+- Three durability modes: `SyncMode::Never`, `SyncMode::Batch`, `SyncMode::Interval`.
 - Three backpressure modes: `Block`, `Drop`, `Error`.
 - Group commit: writer drains all pending batches into a single `write()` syscall.
 - `EventVec::Inline` optimization: single-event appends avoid `Vec<Event>` heap allocation.
@@ -44,7 +44,7 @@ Initial public release.
 - Lock-free atomic `Stats` with 12 runtime metrics.
 - 14 error variants, all `Debug + Display + Clone + Eq`.
 - `scan_batch_header` for fast header-only frame scanning (no CRC, no record decode).
-- Comprehensive test suite: 60 unit tests, 2 doc-tests, 21 benchmarks.
+- Comprehensive test suite: 60 unit tests, 2 doc-tests, 19 benchmarks.
 - 3 fuzz targets: `fuzz_decode_batch`, `fuzz_append_replay`, `fuzz_recovery_after_corruption`.
 - All tests pass under Miri (pure-logic subset; I/O tests skipped).
 - GitHub Actions CI: fmt, clippy, test (matrix: 3 OS × 2 Rust versions), miri, fuzz, benchmark.

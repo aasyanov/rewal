@@ -9,7 +9,8 @@ use crate::sys::{lock_file, unlock_file, FileLock};
 /// Persistence backend for the WAL.
 ///
 /// The writer thread calls [`write`](Storage::write) sequentially; replay and
-/// recovery use [`read_at`](Storage::read_at) for random reads. Implementations
+/// recovery use memory-mapped I/O when available, falling back to
+/// [`read_at`](Storage::read_at) for custom implementations. Implementations
 /// must handle their own thread safety for concurrent read + write access.
 pub trait Storage: Send + Sync {
     /// Appends data. The WAL does not seek before writing.
